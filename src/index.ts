@@ -35,6 +35,7 @@ app.get("/", async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
+console.log("testing")
 
 app.get("/access", async (req: Request, res: Response) => {
   const ip = req.ip || "unknown"; // Ensure ip is always a string
