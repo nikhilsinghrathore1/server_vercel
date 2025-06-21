@@ -27,7 +27,7 @@ app.get("/", async (req, res) => {
     //    },
     //  });
     //@ts-ignore
-    const all = await prisma.x_credentials.findFirst();
+    const all = await prisma.x_credentials.findMany();
     console.log(all)
     res.json({data:all});
   } catch (error) {

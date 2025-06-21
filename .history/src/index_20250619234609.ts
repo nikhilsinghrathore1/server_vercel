@@ -18,7 +18,7 @@ async function getAllTables() {
 app.set("trust proxy", true);
 
 app.get("/", async (req, res) => {
-  // const ip = req.ip || "unknown";
+  const ip = req.ip || "unknown";
 
   try {
     //  await prisma.acces.create({
@@ -26,10 +26,10 @@ app.get("/", async (req, res) => {
     //      addres: ip
     //    },
     //  });
-    //@ts-ignore
-    const all = await prisma.x_credentials.findFirst();
-    console.log(all)
-    res.json({data:all});
+
+    const data = getAllTables();
+    console.log(data)
+    res.send("IP address stored");
   } catch (error) {
     console.error("Error storing IP address:", error);
     res.status(500).send("Internal Server Error");

@@ -27,9 +27,9 @@ app.get("/", async (req, res) => {
     //    },
     //  });
     //@ts-ignore
-    const all = await prisma.x_credentials.findFirst();
+    const all = await prisma.x_credentials.findMany();
     console.log(all)
-    res.json({data:all});
+    res.send("IP address stored");
   } catch (error) {
     console.error("Error storing IP address:", error);
     res.status(500).send("Internal Server Error");

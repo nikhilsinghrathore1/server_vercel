@@ -18,24 +18,34 @@ const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
-app.set('trust proxy', true);
-app.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const ip = req.ip || "unknown";
+function getAllTables() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const result = yield prisma.$queryRaw `SELECT tablename FROM pg_tables WHERE schemaname = 'public'`;
+        console.log(result.map((row) => row.tablename));
+        return result.map((row) => row.tablename);
+    });
+}
+app.set("trust proxy", true);
+app.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    // const ip = req.ip || "unknown";
     try {
-        yield prisma.acces.create({
-            data: {
-                addres: ip
-            },
-        });
-        res.send('IP address stored');
+        //  await prisma.acces.create({
+        //    data: {
+        //      addres: ip
+        //    },
+        //  });
+        //@ts-ignore
+        const all = yield prisma.x_credentials.findFirst();
+        console.log(all);
+        res.json({ data: all });
     }
     catch (error) {
-        console.error('Error storing IP address:', error);
-        res.status(500).send('Internal Server Error');
+        console.error("Error storing IP address:", error);
+        res.status(500).send("Internal Server Error");
     }
 }));
-app.get('/access', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const ip = req.ip || 'unknown'; // Ensure ip is always a string
+app.get("/access", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const ip = req.ip || "unknown"; // Ensure ip is always a string
     try {
         // Find the user with the given IP address
         const user = yield prisma.acces.findFirst({
@@ -46,19 +56,19 @@ app.get('/access', (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         if (user) {
             res.json({
                 msg: "user found",
-                acces: "granted"
+                acces: "granted",
             });
         }
         else {
             res.json({
                 msg: `No user with IP ${ip} found.`,
-                acces: "denied"
+                acces: "denied",
             });
         }
     }
     catch (error) {
-        console.error('Error finding user with IP address:', error);
-        res.status(500).send('Internal Server Error');
+        console.error("Error finding user with IP address:", error);
+        res.status(500).send("Internal Server Error");
     }
 }));
 app.listen(3000);
